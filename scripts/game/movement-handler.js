@@ -1,18 +1,41 @@
 export function exe(piece, whitePlayeTurn) {
     const possiblePositions = positionHandler(piece, whitePlayeTurn);
-
-    if (possiblePositions === undefined) {
-        return;
-    }
-
     possiblePositions.reduce(function(acc, curr) {
-        const position = document.getElementById(`${curr.column + curr.index}`);
+        const position = document.getElementById(`${String.fromCharCode(curr.column) + curr.index}`);
 
         if (position != undefined) {
-            position.classList.toggle('canMove')
-            console.log(`Can move to position: ${position}!`);
+            const initialColor = position.style.backgroundColor;
+            position.style.backgroundColor = 'red';
+            position.style.cursor = 'pointer';
+            console.log(`Can move to position: ${position.id}!`);
+
+            function move() {
+                position.style.backgroundColor = initialColor;
+                piece.removeEventListener('click', exe, true);
+
+                const temp = piece.cloneNode(true);
+
+                temp.addEventListener('click', function() {
+                    exe(temp, whitePlayeTurn);
+                });
+
+                position.appendChild(temp);
+                piece.parentElement.innerHTML = '';
+            }
+
+            piece.addEventListener('click', function() {
+                position.style.backgroundColor = initialColor;
+                position.removeEventListener('click', move, true);
+
+                piece.addEventListener('click', function() {
+                    exe(piece, whitePlayeTurn);
+                });
+            });
+
+            position.addEventListener('click', move);
+
         } else {
-            console.log(`Cannot move to position: ${position}`);
+            console.log(`Cannot move to position: ${String.fromCharCode(curr.column) + curr.index}`);
         }
 
     }, 0);
@@ -20,14 +43,10 @@ export function exe(piece, whitePlayeTurn) {
 
 function positionHandler(piece, whitePlayerTurn) {
     const column = piece.parentElement.parentElement.id;
-    const index = piece.parentElement.firstElementChild.textContent;
+    const index = Number(piece.parentElement.id.split('')[1]);
 
     const patterns = patternHandler(piece);
     const result = [];
-
-    if (patterns === undefined) {
-        return;
-    }
 
     patterns.reduce(function(curr, pattern) {
 
@@ -42,6 +61,7 @@ function positionHandler(piece, whitePlayerTurn) {
 
         if (!whitePlayerTurn) {
             if (pattern.direction == "forward") {
+                console.log(index);
                 result.push({ column: column.charCodeAt(0) + pattern.columnRange, index: index + pattern.indexRange * movementMultiplier });
 
             } else if (pattern.direction == "forwardAndBackward") {
@@ -88,9 +108,12 @@ function patternHandler(piece) {
     const pieceType = piece.className.split('-')[1];
 
     if (pieceType === 'Knight') {
-        return [{ direction: 'mirror', columnRange: 2, indexRange: 2, movement: 'single' }];
+        return [{ direction: 'mirror', columnRange: 1, indexRange: 2, movement: 'single' }];
     }
     if (pieceType === 'Pawn') {
         return [{ direction: 'forward', columnRange: 0, indexRange: 1, movement: 'single' }];
+    }
+    if (pieceType === 'Rook') {
+        return [{ direction: 'forwardAndBackward', columnRange: 0, indexRange: 1, movement: 'linear' }];
     }
 }

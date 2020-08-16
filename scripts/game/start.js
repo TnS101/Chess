@@ -117,37 +117,39 @@ export function start() {
 
     const columnH = document.getElementById("H").querySelectorAll("div");
 
-    columnH[0].appendChild(blackRook);
-    columnH[7].appendChild(whiteRook);
+    const blackRook2 = blackRook;
+    const whiteRook2 = whiteRook;
+
+    columnH[0].appendChild(blackRook2);
+    columnH[7].appendChild(whiteRook2);
 
     Array.from(document.getElementsByClassName("column")).reduce(function(acc, col) {
         const blackPawn = createPiece("Black-Pawn");
         const whitePawn = createPiece("White-Pawn");
 
         col.querySelectorAll("div")[7].appendChild(whitePawn);
-        col.querySelectorAll("div")[1].appendChild(blackPawn);
+        col.querySelectorAll("div")[2].appendChild(blackPawn);
 
         blackPawn.addEventListener('click', function() {
-            exe(blackPawn, true);
+            exe(blackPawn, false);
         });
 
         whitePawn.addEventListener('click', function() {
-            exe(whitePawn, true);
+            exe(whitePawn, false);
         });
     }, 0);
 }
 
-function createPiece(name) {
+export function createPiece(name) {
     const piece = document.createElement("div");
     piece.className = name;
+    piece.style.cursor = 'pointer';
     const image = document.createElement("img");
     image.width = 65;
     image.height = 65;
     image.src = `./images/${name}.png`;
 
     piece.appendChild(image);
-
-    piece;
 
     return piece;
 }
