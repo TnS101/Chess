@@ -1,13 +1,33 @@
-export function exe(piece, playerTurn) {
+export function exe(piece, whitePlayeTurn) {
+    const possiblePositions = positionHandler(piece, whitePlayeTurn);
 
+    if (possiblePositions === undefined) {
+        return;
+    }
+
+    possiblePositions.reduce(function(acc, curr) {
+        const position = document.getElementById(`${curr.column + curr.index}`);
+
+        if (position != undefined) {
+            position.classList.toggle('canMove')
+            console.log(`Can move to position: ${position}!`);
+        } else {
+            console.log(`Cannot move to position: ${position}`);
+        }
+
+    }, 0);
 }
 
-function positionHandler(piece, playerTurn) {
+function positionHandler(piece, whitePlayerTurn) {
     const column = piece.parentElement.parentElement.id;
     const index = piece.parentElement.firstElementChild.textContent;
 
     const patterns = patternHandler(piece);
     const result = [];
+
+    if (patterns === undefined) {
+        return;
+    }
 
     patterns.reduce(function(curr, pattern) {
 
@@ -20,7 +40,7 @@ function positionHandler(piece, playerTurn) {
             movementMultiplier = Math.abs(8 - index);
         }
 
-        if (playerTurn) {
+        if (!whitePlayerTurn) {
             if (pattern.direction == "forward") {
                 result.push({ column: column.charCodeAt(0) + pattern.columnRange, index: index + pattern.indexRange * movementMultiplier });
 
@@ -38,6 +58,7 @@ function positionHandler(piece, playerTurn) {
 
 
             }
+
         } else {
             if (pattern.direction == "forward") {
                 result.push({ column: column.charCodeAt(0) - pattern.columnRange, index: index - pattern.indexRange * movementMultiplier });
@@ -66,7 +87,10 @@ function positionHandler(piece, playerTurn) {
 function patternHandler(piece) {
     const pieceType = piece.className.split('-')[1];
 
-    if (pieceType === "Knight") {
+    if (pieceType === 'Knight') {
         return [{ direction: 'mirror', columnRange: 2, indexRange: 2, movement: 'single' }];
+    }
+    if (pieceType === 'Pawn') {
+        return [{ direction: 'forward', columnRange: 0, indexRange: 1, movement: 'single' }];
     }
 }
