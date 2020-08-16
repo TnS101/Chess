@@ -1,48 +1,47 @@
 window.onload = start;
 
 export function start() {
-    const columnA = document.getElementById("A");
-    columnA.firstElementChild.appendChild(createPiece("Black-Rook"));
-    columnA.lastElementChild.appendChild(createPiece("White-Rook"));
+    const columnA = document.getElementById("A").querySelectorAll("div");
+    columnA[0].appendChild(createPiece("Black-Rook"));
+    columnA[7].appendChild(createPiece("White-Rook"));
 
-    const columnB = document.getElementById("B");
-    columnB.firstElementChild.appendChild(createPiece("Black-Knight"));
-    columnB.lastElementChild.appendChild(createPiece("White-Knight"));
+    const columnB = document.getElementById("B").querySelectorAll("div");
+    columnB[0].appendChild(createPiece("Black-Knight"));
+    columnB[7].appendChild(createPiece("White-Knight"));
 
-    const columnC = document.getElementById("C");
-    columnC.firstElementChild.appendChild(createPiece("Black-Bishop-R"));
-    columnC.lastElementChild.appendChild(createPiece("White-Bishop-R"));
+    const columnC = document.getElementById("C").querySelectorAll("div");
+    columnC[0].appendChild(createPiece("Black-Bishop-R"));
+    columnC[7].appendChild(createPiece("White-Bishop-R"));
 
-    const columnD = document.getElementById("D");
-    columnD.firstElementChild.appendChild(createPiece("Black-King"));
-    columnD.lastElementChild.appendChild(createPiece("White-King"));
+    const columnD = document.getElementById("D").querySelectorAll("div");
+    columnD[0].appendChild(createPiece("Black-King"));
+    columnD[7].appendChild(createPiece("White-King"));
 
-    const columnE = document.getElementById("E");
-    columnE.firstElementChild.appendChild(createPiece("Black-Queen"));
-    columnE.lastElementChild.appendChild(createPiece("White-Queen"));
+    const columnE = document.getElementById("E").querySelectorAll("div");
+    columnE[0].appendChild(createPiece("Black-Queen"));
+    columnE[7].appendChild(createPiece("White-Queen"));
 
-    const columnF = document.getElementById("F");
-    columnF.firstElementChild.appendChild(createPiece("Black-Bishop"));
-    columnF.lastElementChild.appendChild(createPiece("White-Bishop"));
+    const columnF = document.getElementById("F").querySelectorAll("div");
+    columnF[0].appendChild(createPiece("Black-Bishop"));
+    columnF[7].appendChild(createPiece("White-Bishop"));
 
-    const columnG = document.getElementById("G");
-    columnG.firstElementChild.appendChild(createPiece("Black-Knight-R"));
-    columnG.lastElementChild.appendChild(createPiece("White-Knight-R"));
+    const columnG = document.getElementById("G").querySelectorAll("div");
+    columnG[0].appendChild(createPiece("Black-Knight-R"));
+    columnG[7].appendChild(createPiece("White-Knight-R"));
 
-    const columnH = document.getElementById("H");
-    columnH.firstElementChild.appendChild(createPiece("Black-Rook"));
-    columnH.lastElementChild.appendChild(createPiece("White-Rook"));
+    const columnH = document.getElementById("H").querySelectorAll("div");
+    columnH[0].appendChild(createPiece("Black-Rook"));
+    columnH[7].appendChild(createPiece("White-Rook"));
 
     Array.from(document.getElementsByClassName("column")).reduce(function(acc, col, i) {
-        col.children[6].appendChild(createPiece("White-Pawn"));
-        col.children[1].appendChild(createPiece("Black-Pawn"));
+        col.querySelectorAll("div")[5].appendChild(createPiece("White-Pawn"));
+        col.querySelectorAll("div")[0].appendChild(createPiece("Black-Pawn"));
     });
 }
 
 function createPiece(name) {
     const piece = document.createElement("div");
     piece.className = name;
-    piece.style.background = "none";
     const image = document.createElement("img");
     image.width = 65;
     image.height = 65;

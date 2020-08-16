@@ -3,7 +3,7 @@
 }
 
 .grid-container-10 {
-    background-color: #2196F3;
+    padding-top: 60px;
     margin: 0 auto;
 }
 
@@ -24,6 +24,21 @@
     .grid-item {
         height: 4%;
     }
+}
+
+img {
+    margin-top: 10px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    height: 70%;
+    width: 50%;
+}
+
+.grid-item div {
+    display: inline-block;
+    width: 100%;
+    height: 100%;
 }
 
 @media only screen and (min-width: 350px) {
@@ -159,12 +174,20 @@
     width: 12%;
 }
 
+.indexator {
+    background-color: #fff5eb;
+    font-family: Consolas, monaco, monospace;
+    display: inline-block;
+    height: 1%;
+    font-size: large;
+}
+
 .black {
-    background-color: #af634e;
+    background-color: #c78e73;
 }
 
 .white {
-    background-color: #ebfffe;
+    background-color: #f1fcfb;
 }
 
 h1 {
