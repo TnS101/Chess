@@ -14,13 +14,13 @@
           clonedColumn.setAttribute("id", character);
           clonedColumn.style.display = "inline-block";
 
-          paint(clonedColumn, i);
+          paint(clonedColumn, i, character);
           board.appendChild(clonedColumn);
       }
 
   }
 
-  function paint(child, index) {
+  function paint(child, index, character) {
       Array.from(child.children).reduce(function(acc, curr, i) {
           const span = curr.getElementsByClassName("index")[0];
           if (span != undefined && (Number(span.textContent) + index + Math.floor(i / 8)) % 2 == 0) {
@@ -28,5 +28,6 @@
           } else {
               curr.className = "grid-item white";
           }
+          curr.id = character + (9 - Number(span.textContent));
       }, 0);
   }

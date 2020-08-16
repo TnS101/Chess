@@ -34,8 +34,8 @@ export function start() {
     columnH[7].appendChild(createPiece("White-Rook"));
 
     Array.from(document.getElementsByClassName("column")).reduce(function(acc, col, i) {
-        col.querySelectorAll("div")[5].appendChild(createPiece("White-Pawn"));
-        col.querySelectorAll("div")[0].appendChild(createPiece("Black-Pawn"));
+        col.querySelectorAll("div")[7].appendChild(createPiece("White-Pawn"));
+        col.querySelectorAll("div")[2].appendChild(createPiece("Black-Pawn"));
     });
 }
 
