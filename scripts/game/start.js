@@ -12,11 +12,11 @@ export function start() {
     columnA[7].appendChild(whiteRook);
 
     blackRook.addEventListener('click', function() {
-        exe(blackRook, true);
+        exe(blackRook);
     });
 
     whiteRook.addEventListener('click', function() {
-        exe(blackRook, true);
+        exe(blackRook);
     });
 
     const columnB = document.getElementById("B").querySelectorAll("div");
@@ -28,11 +28,11 @@ export function start() {
     columnB[7].appendChild(whiteKnight);
 
     blackKnight.addEventListener('click', function() {
-        exe(blackKnight, true);
+        exe(blackKnight);
     });
 
     whiteKnight.addEventListener('click', function() {
-        exe(whiteKnight, true);
+        exe(whiteKnight);
     });
 
     const columnC = document.getElementById("C").querySelectorAll("div");
@@ -44,11 +44,11 @@ export function start() {
     columnC[7].appendChild(whiteBishopR);
 
     blackBishopR.addEventListener('click', function() {
-        exe(blackBishopR, true);
+        exe(blackBishopR);
     });
 
     whiteBishopR.addEventListener('click', function() {
-        exe(whiteBishopR, true);
+        exe(whiteBishopR);
     });
 
     const columnD = document.getElementById("D").querySelectorAll("div");
@@ -60,11 +60,11 @@ export function start() {
     columnD[7].appendChild(whiteKing);
 
     blackKing.addEventListener('click', function() {
-        exe(blackKing, true);
+        exe(blackKing);
     });
 
     whiteKing.addEventListener('click', function() {
-        exe(whiteKing, true);
+        exe(whiteKing);
     });
 
     const columnE = document.getElementById("E").querySelectorAll("div");
@@ -76,11 +76,11 @@ export function start() {
     columnE[7].appendChild(whiteQueen);
 
     blackQueen.addEventListener('click', function() {
-        exe(blackQueen, true);
+        exe(blackQueen);
     });
 
     whiteQueen.addEventListener('click', function() {
-        exe(whiteQueen, true);
+        exe(whiteQueen);
     });
 
     const columnF = document.getElementById("F").querySelectorAll("div");
@@ -92,11 +92,11 @@ export function start() {
     columnF[7].appendChild(whiteBishop);
 
     blackBishop.addEventListener('click', function() {
-        exe(blackBishop, true);
+        exe(blackBishop);
     });
 
     whiteBishop.addEventListener('click', function() {
-        exe(whiteBishop, true);
+        exe(whiteBishop);
     });
 
     const columnG = document.getElementById("G").querySelectorAll("div");
@@ -108,11 +108,11 @@ export function start() {
     columnG[7].appendChild(whitekKnightR);
 
     blackKnightR.addEventListener('click', function() {
-        exe(blackKnightR, true);
+        exe(blackKnightR);
     });
 
     whitekKnightR.addEventListener('click', function() {
-        exe(whitekKnightR, true);
+        exe(whitekKnightR);
     });
 
     const columnH = document.getElementById("H").querySelectorAll("div");
@@ -131,11 +131,11 @@ export function start() {
         col.querySelectorAll("div")[2].appendChild(blackPawn);
 
         blackPawn.addEventListener('click', function() {
-            exe(blackPawn, true);
+            exe(blackPawn);
         });
 
         whitePawn.addEventListener('click', function() {
-            exe(whitePawn, true);
+            exe(whitePawn);
         });
     }, 0);
 }

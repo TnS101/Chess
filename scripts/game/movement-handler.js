@@ -1,20 +1,20 @@
-export function exe(piece, whitePlayerTurn) {
+var turnCounter = 0;
 
-    console.log(whitePlayerTurn);
+export function exe(piece) {
 
-    const possiblePositions = positionHandler(piece, whitePlayerTurn);
+    const possiblePositions = positionHandler(piece, turnCounter);
     possiblePositions.reduce(function(acc, curr) {
         const position = document.getElementById(`${String.fromCharCode(curr.column) + curr.index}`);
 
         if (position != undefined) {
             const initialColor = position.style.backgroundColor;
+
             if (!position.className.includes('canMove')) {
                 position.className += ' canMove';
             }
+
             position.style.backgroundColor = 'red';
             position.style.cursor = 'pointer';
-
-            turnChecker(whitePlayerTurn);
 
             console.log(`Can move to position: ${position.id}!`);
 
@@ -25,13 +25,14 @@ export function exe(piece, whitePlayerTurn) {
                 position.removeEventListener('click', move, true);
 
                 piece.addEventListener('click', function() {
-                    exe(piece, whitePlayerTurn);
+                    exe(piece, turnCounter);
                 });
             });
 
             position.addEventListener('click', function() {
                 tileColorReset(initialColor);
-                move(position, piece, whitePlayerTurn, initialColor);
+                turnCounter = move(position, piece, turnCounter, initialColor);
+                console.log(turnCounter);
             });
 
         } else {
@@ -48,22 +49,20 @@ function tileColorReset(initialColor) {
     }, 0);
 }
 
-function turnChecker(whitePlayerTurn) {
+function turnChecker(turnCounter) {
     const blackPieces = document.getElementsByClassName('Black');
     const whitePieces = document.getElementsByClassName('White');
 
-    if (whitePlayerTurn) {
+    if (turnCounter % 2 == 0) {
         Array.from(blackPieces).reduce(function(acc, piece) {
             piece.removeEventListener('click', exe);
         }, 0);
 
         Array.from(whitePieces).reduce(function(acc, piece) {
             piece.addEventListener('click', function() {
-                exe(piece, whitePlayerTurn);
+                exe(piece, turnCounter);
             });
         }, 0);
-
-        whitePlayerTurn = false;
 
     } else {
         Array.from(whitePieces).reduce(function(acc, piece) {
@@ -72,37 +71,38 @@ function turnChecker(whitePlayerTurn) {
 
         Array.from(blackPieces).reduce(function(acc, piece) {
             piece.addEventListener('click', function() {
-                exe(piece, whitePlayerTurn);
+                exe(piece, turnCounter);
             });
         }, 0);
-        whitePlayerTurn = true;
     }
+
+    return ++turnCounter;
 }
 
-function move(position, piece, whitePlayerTurn, initialColor) {
+function move(position, piece, turnCounter, initialColor) {
     position.style.backgroundColor = initialColor;
     piece.removeEventListener('click', exe, true);
 
     const temp = piece.cloneNode(true);
 
-    whitePlayerTurn = false;
-
     temp.addEventListener('click', function() {
-        exe(temp, whitePlayerTurn);
+        exe(temp, turnCounter);
     });
 
     position.appendChild(temp);
     piece.parentElement.innerHTML = '';
+
+    return turnChecker(turnCounter);
 }
 
-function positionHandler(piece, whitePlayerTurn) {
+function positionHandler(piece, turnCounter) {
     const column = piece.parentElement.parentElement.id;
     const index = Number(piece.parentElement.id.split('')[1]);
 
     const patterns = patternHandler(piece);
     const result = [];
 
-    patterns.reduce(function(curr, pattern) {
+    patterns.reduce(function(acc, pattern) {
         var movementMultiplier = 1;
 
         if (pattern.movement == 'linear') {
@@ -112,10 +112,9 @@ function positionHandler(piece, whitePlayerTurn) {
             movementMultiplier = Math.abs(8 - index);
         }
 
-        if (whitePlayerTurn) {
+        if (turnCounter % 2 == 0) {
 
             if (pattern.direction == "forward") {
-                console.log(index);
                 result.push({ column: column.charCodeAt(0) + pattern.columnRange, index: index + pattern.indexRange * movementMultiplier });
 
             } else if (pattern.direction == "forwardAndBackward") {
