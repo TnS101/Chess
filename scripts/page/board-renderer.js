@@ -24,9 +24,9 @@
       Array.from(child.children).reduce(function(acc, curr, i) {
           const span = curr.getElementsByClassName("index")[0];
           if (span != undefined && (Number(span.textContent) + index + Math.floor(i / 8)) % 2 == 0) {
-              curr.className = "grid-item black";
+              curr.className = "grid-item blackSquare";
           } else {
-              curr.className = "grid-item white";
+              curr.className = "grid-item whiteSquare";
           }
           curr.id = character + (9 - Number(span.textContent));
       }, 0);

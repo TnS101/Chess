@@ -12,12 +12,24 @@
     height: 85%;
 }
 
+.canMove {
+    background-color: red;
+}
+
 .grid-item {
     width: 100%;
     height: 3%;
     background-color: aliceblue;
     border: 1px solid rgba(0, 0, 0, 0.8);
     text-align: center;
+}
+
+[class*="White-"]:hover {
+    background-color: #000000;
+}
+
+[class*="Black-"]:hover {
+    background-color: orange;
 }
 
 @media only screen and (min-width: 300px) {
@@ -181,11 +193,11 @@ img {
     font-size: large;
 }
 
-.black {
+.blackSquare {
     background-color: #c78e73;
 }
 
-.white {
+.whiteSquare {
     background-color: #f1fcfb;
 }
 
