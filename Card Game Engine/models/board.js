@@ -1,20 +1,13 @@
 module.exports = class Board {
   constructor(width, height) {
     this.slots = [];
-    let row = [];
-
-    for (let i = 0; i < width; i++) {
-      row.push("*");
-    }
 
     for (let i = 0; i < height; i++) {
+      let row = [];
+      for (let i = 0; i < width; i++) {
+        row.push("*");
+      }
       this.slots.push(row);
-    }
-  }
-
-  _validate(x, y) {
-    if (x > this.slots[0].length && y > this.slots.length) {
-      throw new Error("Invalid position coordinates");
     }
   }
 
@@ -41,5 +34,11 @@ module.exports = class Board {
     this.slots.reduce(function (acc, row) {
       console.log(row);
     }, 0);
+  }
+
+  _validate(x, y) {
+    if (x > this.slots[0].length || y > this.slots.length) {
+      throw new Error("Invalid position coordinates");
+    }
   }
 };
