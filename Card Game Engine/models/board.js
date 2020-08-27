@@ -1,44 +1,56 @@
 module.exports = class Board {
-  constructor(width, height) {
-    this.slots = [];
+    constructor(width, height) {
+        this.slots = [];
 
-    for (let i = 0; i < height; i++) {
-      let row = [];
-      for (let i = 0; i < width; i++) {
-        row.push("*");
-      }
-      this.slots.push(row);
+        for (let i = 0; i < height; i++) {
+            let row = [];
+            for (let i = 0; i < width; i++) {
+                row.push({ value: "*", effects: [] });
+            }
+            this.slots.push(row);
+        }
     }
-  }
 
-  setCustomSlot(x, y) {
-    this._validate(x, y);
-    if (!this.slots[x][y].includes("!")) {
-      this.slots[x][y] += "!";
+    fillSlot(x, y, type, effect) {
+        this._validate(x, y);
+        if (!this.slots[x][y].value.includes(type)) {
+            let slot = this.slots[x][y];
+            slot.value += type;
+
+            if (type === "?") {
+                slot.effects.push(effect);
+            }
+        }
     }
-  }
 
-  removeCustomSlot(x, y) {
-    this._validate(x, y);
+    emptySlot(x, y, type, effect) {
+        this._validate(x, y);
 
-    if (this.slots[x][y].includes("!")) {
-      let slot = this.slots[x][y];
-      const index = slot.indexOf("!");
+        if (this.slots[x][y].value.includes(type)) {
+            let slot = this.slots[x][y];
+            const index = slot.value.indexOf(type);
 
-      this.slots[x][y] =
-        slot.slice(0, index) + slot.slice(index + 1, slot.length);
+            if (type === "?") {
+                if (slot.effects.includes(effect)) {
+                    slot.effects.splice(slot.effects.indexOf(effect), 1);
+                }
+            }
+
+            this.slots[x][y] =
+                slot.value.slice(0, index) +
+                slot.value.slice(index + 1, slot.value.length);
+        }
     }
-  }
 
-  print() {
-    this.slots.reduce(function (acc, row) {
-      console.log(row);
-    }, 0);
-  }
-
-  _validate(x, y) {
-    if (x > this.slots[0].length || y > this.slots.length) {
-      throw new Error("Invalid position coordinates");
+    print() {
+        this.slots.reduce(function(acc, row) {
+            console.log(row);
+        }, 0);
     }
-  }
+
+    _validate(x, y) {
+        if (x > this.slots[0].length || y > this.slots.length) {
+            throw new Error("Invalid position coordinates");
+        }
+    }
 };
