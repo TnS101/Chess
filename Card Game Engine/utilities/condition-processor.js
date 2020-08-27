@@ -1,6 +1,6 @@
 const rng = require("./rng");
 
-module.exports = function exe(condition, reward, player) {
+module.exports = function exe(condition, action, player) {
     if (condition.comparer === '<') {
         if (condition.left > condition.right) {
             return;
@@ -17,55 +17,57 @@ module.exports = function exe(condition, reward, player) {
         }
     }
 
-    if (reward.type === 'Draw') {
-        player.draw(reward.value);
+    if (action.type === 'Draw') {
+        player.draw(action.value);
 
-    } else if (reward.type === 'AddToHand') {
-        if (reward.subType === 'Random') {
-            const cards = reward.context;
+    } else if (action.type === 'AddToHand') {
+        if (action.subType === 'Random') {
+            const cards = action.context;
 
-            for (let i = 0; i < reward.value; i++) {
+            for (let i = 0; i < action.value; i++) {
                 const card = cards[rng(0, cards.length)];
-                player.deck.add(card, 1, reward.subValue);
+
+                player.deck.add(card, 1, action.subValue);
             }
 
         } else {
-            const card = cards.find(c => c.name === reward.cardName);
-            player.deck.add(card, reward.value, reward.subValue);
+            const card = cards.find(c => c.name === action.cardName);
+            player.deck.add(card, action.value, action.subValue);
         }
 
-    } else if (reward.type === 'FromDeck') {
-        const cards = reward.context;
+    } else if (action.type === 'FromDeck') {
+        const cards = action.context;
         const result = [];
 
-        const card = cards.find(c => c.name === reward.cardName);
+        const card = cards.find(c => c.name === action.cardName);
 
-        if (reward.hasOwnProperty('subCondition')) {
-            for (let i = 0; i < reward.value; i++) {
-                if (reward.subCondition.comparator === '<') {
-                    result.push(cards.find(c => c[reward.subCondition.type] < reward.subCondition.value));
-                } else if (reward.subCondition.comparator === '>') {
-                    result.push(cards.find(c => c[reward.subCondition.type] > reward.subCondition.value));
-                } else if (reward.subCondition.comparator === '=') {
-                    result.push(cards.find(c => c[reward.subCondition.type] == reward.subCondition.value));
+        if (action.hasOwnProperty('subCondition')) {
+
+            for (let i = 0; i < action.value; i++) {
+                if (action.subCondition.comparator === '<') {
+                    result.push(cards.find(c => c[action.subCondition.type] < action.subCondition.value));
+
+                } else if (action.subCondition.comparator === '>') {
+                    result.push(cards.find(c => c[action.subCondition.type] > action.subCondition.value));
+
+                } else if (action.subCondition.comparator === '=') {
+                    result.push(cards.find(c => c[action.subCondition.type] == action.subCondition.value));
                 }
             }
         } else {
             result.push(card);
         }
 
-        if (reward.subType === 'Add') {
+        if (action.subType === 'Add') {
             result.reduce(function(acc, card) {
                 if (player.hand.length < player.hand.maxLength) {
-                    player.hand.length++;
                     player.hand.add(card);
                 }
             }, 0);
 
-        } else if (reward.subType === 'Remove') {
+        } else if (action.subType === 'Remove') {
             result.reduce(function(acc, card) {
                 if (player.deck.length > 0) {
-                    player.deck.length--;
 
                     if (player.deck.includes(card)) {
                         player.deck.splice(player.deck.indexOf(card), 1);
@@ -73,10 +75,9 @@ module.exports = function exe(condition, reward, player) {
                 }
             }, 0);
 
-        } else if (reward.subType === 'Place') {
+        } else if (action.subType === 'Place') {
             result.reduce(function(acc, card) {
-                if (player.field.slots > 0) {
-                    player.field.slots--;
+                if (player.field.length < player.fieldMaxLength) {
                     player.field.add(card);
                 }
             }, 0);
