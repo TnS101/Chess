@@ -21,7 +21,6 @@ module.exports = class Player {
         this.mana = mana;
         this.maxHealth = maxHealth;
         this.maxMana = maxMana;
-        this.isWinner = false;
 
         this.draw(startHandSize);
     }
@@ -73,8 +72,35 @@ module.exports = class Player {
         }
     }
 
-    giveUp(opponent) {
-        opponent.isWinner = true;
-        console.log(`${opponent.name} has won the Game!`);
+    giveUp() {
+        console.log('Your opponent has won the Game!');
+    }
+
+    attack(cardName, target, opponentField) {
+        const card = this.field.find(c => c.name === cardName);
+
+        if (card.attack > 0 && card.health > 0) {
+            card.battle(target);
+
+            if (card.health <= 0) {
+                this.field.splice(this.field.indexOf(card), 1);
+            }
+
+            if (target.health <= 0) {
+                if (!target.hasOwnProperty('attack')) {
+                    console.log('You have won the Game!');
+                } else {
+                    opponentField.splice(opponentField.indexOf(target), 1);
+                }
+            }
+        }
+    }
+
+    takeDamage(damage) {
+        this.health -= damage;
+
+        if (this.health <= 0 && this.maxHealth > 0) {
+            console.log('Your opponent has won the Game!');
+        }
     }
 }
