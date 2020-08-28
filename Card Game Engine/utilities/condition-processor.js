@@ -1,19 +1,24 @@
 const rng = require("./rng");
 
-module.exports = function exe(condition, action, player) {
-    if (condition.comparer === '<') {
-        if (condition.left > condition.right) {
-            return;
-        }
+module.exports = function exe(trigger, player) {
+    const condition = trigger.condition;
+    const action = trigger.action;
 
-    } else if (condition.comparer === '>') {
-        if (condition.left < condition.right) {
-            return;
-        }
+    if (condition !== undefined) {
+        if (condition.comparer === '<') {
+            if (condition.left > condition.right) {
+                return;
+            }
 
-    } else if (condition.comparer === '=') {
-        if (condition.left != condition.right) {
-            return;
+        } else if (condition.comparer === '>') {
+            if (condition.left < condition.right) {
+                return;
+            }
+
+        } else if (condition.comparer === '=') {
+            if (condition.left != condition.right) {
+                return;
+            }
         }
     }
 

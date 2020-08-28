@@ -29,14 +29,17 @@ module.exports = class Player {
         if (amount <= this.deck.length) {
             for (let i = 0; i < amount; i++) {
                 if (this.hand.length < this.maxHandSize) {
-                    let card = context[rng(0, context.length)];
+                    let card = this.deck[rng(0, this.deck.length)];
 
                     while (card == undefined) {
-                        card = context[rng(0, context.length)];
+                        card = this.deck[rng(0, this.deck.length)];
                     }
 
+                    card.triggerChecker('Draw', this);
                     this.hand.push(card);
                     this.deck.splice(this.deck.indexOf(card), 1);
+
+                    console.log('<--------Draw-------->');
                 }
             }
         }
@@ -64,6 +67,7 @@ module.exports = class Player {
 
             if (card.manaCost <= this.mana) {
                 this.mana -= card.manaCost;
+                card.triggerChecker('Place', this);
 
                 this.hand.splice(this.hand.indexOf(card), 1);
                 this.field[position] = card;
@@ -84,13 +88,16 @@ module.exports = class Player {
 
             if (card.health <= 0) {
                 this.field.splice(this.field.indexOf(card), 1);
+                card.triggerChecker('Death', this);
             }
 
             if (target.health <= 0) {
                 if (!target.hasOwnProperty('attack')) {
                     console.log('You have won the Game!');
+
                 } else {
                     opponentField.splice(opponentField.indexOf(target), 1);
+                    target.triggerChecker('Death', this);
                 }
             }
         }
