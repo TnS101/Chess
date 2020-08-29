@@ -31,17 +31,42 @@ module.exports = function exe(trigger, player) {
 
             for (let i = 0; i < action.value; i++) {
                 const card = cards[rng(0, cards.length)];
+                card.manaCost -= action.subValue;
 
-                player.deck.add(card, 1, action.subValue);
+                player.hand.push(card);
             }
 
         } else {
             const card = cards.find(c => c.name === action.cardName);
-            player.deck.add(card, action.value, action.subValue);
+
+            for (let i = 0; i < action.value; i++) {
+                card.manaCost -= action.subValue;
+                player.hand.push(card);
+            }
+        }
+
+    } else if (action.type === 'AddToDeck') {
+        if (action.subType === 'Random') {
+            const cards = action.context;
+
+            for (let i = 0; i < action.value; i++) {
+                const card = cards[rng(0, cards.length)];
+                card.manaCost -= action.subValue;
+
+                player.deck.push(card);
+            }
+
+        } else {
+            const card = cards.find(c => c.name === action.cardName);
+
+            for (let i = 0; i < action.value; i++) {
+                card.manaCost -= action.subValue;
+                player.deck.push(card);
+            }
         }
 
     } else if (action.type === 'FromDeck') {
-        const cards = action.context;
+        const cards = player.deck;
         const result = [];
 
         const card = cards.find(c => c.name === action.cardName);
@@ -60,13 +85,15 @@ module.exports = function exe(trigger, player) {
                 }
             }
         } else {
-            result.push(card);
+            for (let i = 0; i < action.value; i++) {
+                result.push(card);
+            }
         }
 
-        if (action.subType === 'Add') {
+        if (action.subType === 'AddToHand') {
             result.reduce(function(acc, card) {
                 if (player.hand.length < player.hand.maxLength) {
-                    player.hand.add(card);
+                    player.hand.push(card);
                 }
             }, 0);
 
@@ -83,7 +110,7 @@ module.exports = function exe(trigger, player) {
         } else if (action.subType === 'Place') {
             result.reduce(function(acc, card) {
                 if (player.field.length < player.fieldMaxLength) {
-                    player.field.add(card);
+                    player.field.push(card);
                 }
             }, 0);
         }
