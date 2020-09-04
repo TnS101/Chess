@@ -26,7 +26,7 @@ module.exports = class Player {
     }
 
     draw(amount) {
-        if (amount <= this.deck.length) {
+        if (this.deck.length - amount > 0) {
             for (let i = 0; i < amount; i++) {
                 if (this.hand.length < this.maxHandSize) {
                     let card = this.deck[rng(0, this.deck.length)];
@@ -35,9 +35,10 @@ module.exports = class Player {
                         card = this.deck[rng(0, this.deck.length)];
                     }
 
-                    card.triggerChecker('Draw', this);
-                    this.hand.push(card);
                     this.deck.splice(this.deck.indexOf(card), 1);
+                    this.hand.push(card);
+
+                    card.triggerChecker('Draw', this);
 
                     console.log('<--------Draw-------->');
                 }
@@ -62,16 +63,24 @@ module.exports = class Player {
     }
 
     placeCard(name, position) {
+
+        if (position >= this.fieldMaxLength) {
+            throw new Error(`Position must be less than the Field Max Length! (${position} < ${this.fieldMaxLength})`);
+        }
+
         if (this.fieldLength < this.fieldMaxLength) {
             const card = this.hand.find(c => c.name === name);
 
             if (card.manaCost <= this.mana) {
                 this.mana -= card.manaCost;
-                card.triggerChecker('Place', this);
 
                 this.hand.splice(this.hand.indexOf(card), 1);
-                this.field[position] = card;
+                this.field.splice(position, 0, card);
                 this.fieldMaxLength++;
+
+                card.triggerChecker('Place', this, this);
+
+                console.log('<--------Place-------->');
             }
         }
     }
@@ -80,15 +89,16 @@ module.exports = class Player {
         console.log('Your opponent has won the Game!');
     }
 
-    attack(cardName, target, opponentField) {
+    attack(cardName, index, opponent) {
         const card = this.field.find(c => c.name === cardName);
+        const target = opponent.field[index];
 
         if (card.attack > 0 && card.health > 0) {
             card.battle(target);
 
             if (card.health <= 0) {
                 this.field.splice(this.field.indexOf(card), 1);
-                card.triggerChecker('Death', this);
+                card.triggerChecker('Death', this, this);
             }
 
             if (target.health <= 0) {
@@ -96,8 +106,8 @@ module.exports = class Player {
                     console.log('You have won the Game!');
 
                 } else {
-                    opponentField.splice(opponentField.indexOf(target), 1);
-                    target.triggerChecker('Death', this);
+                    opponent.field.splice(opponent.field.indexOf(target), 1);
+                    target.triggerChecker('Death', opponent, opponent);
                 }
             }
         }

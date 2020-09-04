@@ -1,20 +1,14 @@
 const conditionProcessor = require('../utilities/condition-processor');
 
 module.exports = class Trigger {
-    constructor(conditionType, actionType, actionValue, actionSubType, actionSubValue, cardName) {
-        this.condition = {};
-        this.action = {};
-
-        this.condition.type = conditionType;
-        this.action.type = actionType;
-        this.action.value = actionValue;
-        this.action.subType = actionSubType;
-        this.action.subValue = actionSubValue;
-        this.action.cardName = cardName;
+    constructor(condition, actionType, actionValue, actionSubType, actionSubValue, cardName, subCondition) {
+        this.condition = condition;
+        this.action = { type: actionType, value: actionValue, subType: actionSubType, subValue: actionSubValue, cardName: cardName };
+        this.subCondition = subCondition;
     }
 
-    fire(player) {
-        conditionProcessor(this, player);
-        console.log(`Trigger with type : ${this.condition.type} was triggered!`);
+    fire(caster, target) {
+        conditionProcessor(this, caster, target);
+        console.log(`Trigger with type : ${this.condition.type} was fired!`);
     }
 }

@@ -1,5 +1,3 @@
-const conditionProcessor = require('../utilities/condition-processor');
-
 module.exports = class Card {
     constructor(name, value, type, trigger, manaCost, health, maxHealth, attack) {
         this.name = name;
@@ -14,24 +12,25 @@ module.exports = class Card {
     }
 
     battle(target) {
-        this._triggerChecker('Battle');
-
         if (target.hasOwnProperty('attack')) {
             this.takeDamage(target.attack);
         }
-        target.takeDamage(card.attack);
+        target.takeDamage(this.attack);
+
+        this.triggerChecker('Battle');
+
+        console.log(`<--------${this.name} battles ${target.name}-------->`);
     }
 
     takeDamage(damage) {
-        this.triggerChecker('TakeDamage');
         this.health -= damage;
+        this.triggerChecker('TakeDamage');
     }
 
-    triggerChecker(type, player) {
+    triggerChecker(type, caster, target) {
         if (this.trigger !== undefined) {
-            if (type === this.trigger.action.type) {
-                conditionProcessor(this.trigger, player);
-                console.log(`Trigger with type : ${type} was triggered!`);
+            if (type === this.trigger.condition.type) {
+                this.trigger.fire(caster, target);
             }
         }
     }

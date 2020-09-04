@@ -1,10 +1,14 @@
 const Board = require("./models/board");
 const Player = require('./models/player');
 const Card = require('./models/card');
+const Trigger = require('./models/trigger');
+const Condition = require('./models/condition');
 
-const trigger = { condition: { type: 'Draw' }, action: { type: 'Draw', value: 1 } };
-const deathTrigger = { condition: { type: 'Death' }, action: { type: 'FromDeck', value: 1, subType: 'Place', cardName: 'Card1' } };
+const drawCondition = new Condition('Draw');
+const deathCondition = new Condition('Death');
 
+const trigger = new Trigger(drawCondition, 'Draw', 1);
+const deathTrigger = new Trigger(deathCondition, 'FromDeck', 1, 'Place', 0, 'Card1');
 
 const effectCard = new Card('ToDraw', 1, 'Effect', trigger, 0, 0, 0, 0);
 const card1 = new Card('Card1', 1, 1, undefined, 1, 1, 1, 1);
