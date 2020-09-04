@@ -22,17 +22,17 @@ module.exports = class Condition {
         }
 
         if (this.comparer === '<') {
-            if (caster[left] > right) {
+            if (caster[left] >= right) {
                 return false;
             }
 
         } else if (this.comparer === '>') {
-            if (caster[left] < right) {
+            if (caster[left] <= right) {
                 return false;
             }
 
         } else if (this.comparer === '=') {
-            if (caster[left] != right) {
+            if (caster[left] !== right) {
                 return false;
             }
         }

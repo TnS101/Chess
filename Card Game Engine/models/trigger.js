@@ -8,7 +8,10 @@ module.exports = class Trigger {
     }
 
     fire(caster, target) {
-        conditionProcessor(this, caster, target);
-        console.log(`Trigger with type : ${this.condition.type} was fired!`);
+        const isFired = conditionProcessor(this, caster, target);
+
+        if (isFired) {
+            console.log(`Trigger with type : ${this.condition.type} was fired!`);
+        }
     }
 }

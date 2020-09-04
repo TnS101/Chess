@@ -4,7 +4,7 @@ const Card = require('./models/card');
 const Trigger = require('./models/trigger');
 const Condition = require('./models/condition');
 
-const drawCondition = new Condition('Draw', 'Health', '=', 1);
+const drawCondition = new Condition('Draw', 'Health', '=', 2);
 const deathCondition = new Condition('Death');
 
 const trigger = new Trigger(drawCondition, 'Draw', 1);

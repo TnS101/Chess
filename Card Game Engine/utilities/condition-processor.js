@@ -4,7 +4,7 @@ module.exports = function exe(trigger, caster, target) {
     const action = trigger.action;
 
     if (!trigger.condition.isValid(caster, target)) {
-        return;
+        return false;
     }
 
     if (action.type === 'Draw') {
@@ -92,4 +92,6 @@ module.exports = function exe(trigger, caster, target) {
             }, 0);
         }
     }
+
+    return true;
 };
